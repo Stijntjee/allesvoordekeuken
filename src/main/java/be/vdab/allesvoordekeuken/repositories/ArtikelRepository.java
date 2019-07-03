@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface ArtikelRepository
 {
     Optional<Artikel> findById(int id);
+    void create(Artikel artikel);
 }

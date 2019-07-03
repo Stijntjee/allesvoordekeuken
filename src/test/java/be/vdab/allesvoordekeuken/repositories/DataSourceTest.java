@@ -1,4 +1,4 @@
-package be.vdab.allesvoordekeuken;
+package be.vdab.allesvoordekeuken.repositories;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
