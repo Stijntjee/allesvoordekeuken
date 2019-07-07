@@ -39,6 +39,10 @@ public class JpaArtikelRepositoryTest extends AbstractTransactionalJUnit4SpringC
         return super.jdbcTemplate.queryForObject("select id from artikels where naam = 'vork XXL'",Integer.class);
     }
 
+    private int idVanTestFoodArtikel() {
+        return super.jdbcTemplate.queryForObject("select id from artikels where naam = 'vork XXL'",Integer.class);
+    }
+
     @Test
     public void findById()
     {
@@ -52,4 +56,23 @@ public class JpaArtikelRepositoryTest extends AbstractTransactionalJUnit4SpringC
         assertThat(artikel.getId()).isPositive();
         assertThat(super.countRowsInTableWhere(ARTIKELS, "id=" + artikel.getId())).isOne();
     }
+
+    @Test
+    public void findBijNaamContains() {
+        assertThat(repository.findByNaamContains("es"))
+                .hasSize(super.jdbcTemplate.queryForObject(
+                        "select count(*) from artikels where naam like '%es%'", Integer.class))
+                .extracting(artikel -> artikel.getNaam().toLowerCase())
+                .allSatisfy(naam -> assertThat(naam).contains("es"))
+                .isSorted();
+    }
+
+    @Test
+    public void verhoogPrijs() {
+        assertThat(repository.verhoogPrijs(BigDecimal.TEN))
+                .isEqualTo(super.countRowsInTable("artikels"));
+    }
+
+
+
 }
