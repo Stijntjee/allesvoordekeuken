@@ -20,7 +20,7 @@ public class JpaArtikelRepository implements ArtikelRepository
 
     //METHODS
     @Override
-    public Optional<Artikel> findById(int id)
+    public Optional<Artikel> findById(long id)
     {
         return Optional.ofNullable(manager.find(Artikel.class,id));
     }

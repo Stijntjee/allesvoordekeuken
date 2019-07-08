@@ -3,19 +3,28 @@ package be.vdab.allesvoordekeuken.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table( name = "artikels")
-public class Artikel implements Serializable
+@DiscriminatorColumn(name = "soort")
+public abstract class Artikel implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String naam;
     private BigDecimal aankoopprijs;
     private BigDecimal verkoopprijs;
+    @ElementCollection
+    @CollectionTable(name = "kortingen", joinColumns = @JoinColumn(name = "artikelId"))
+    @OrderBy("vanafAantal")
+    private Set<Korting> kortingen;
 
     //CONSTRUCTORS
     protected Artikel()
@@ -26,10 +35,11 @@ public class Artikel implements Serializable
         this.naam = naam;
         this.aankoopprijs = aankoopprijs;
         this.verkoopprijs = verkoopprijs;
+        this.kortingen = new LinkedHashSet<>();
     }
 
     //GETTERS
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -43,5 +53,9 @@ public class Artikel implements Serializable
 
     public BigDecimal getVerkoopprijs() {
         return verkoopprijs;
+    }
+
+    public Set<Korting> getKortingen() {
+        return Collections.unmodifiableSet(kortingen);
     }
 }

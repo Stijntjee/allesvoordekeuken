@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ArtikelRepository
 {
-    Optional<Artikel> findById(int id);
+    Optional<Artikel> findById(long id);
     void create(Artikel artikel);
     List<Artikel> findByNaamContains(String woord);
     int verhoogPrijs(BigDecimal percentage);
